@@ -8,22 +8,24 @@ import random
 
 
 def save_code(request):
-    request_data = request.GET
-    code = request_data['code'].strip()
-    container_name = request_data['container_name'].strip();
-    file_name = request_data['file_name'].strip();
+    if request.method == "POST":
+        request_data = request.POST
+        code = request_data['code']
+        # print(code);
+        container_name = request_data['container_name'].strip();
+        file_name = request_data['file_name'].strip();
 
-    with open("code/main.py", "w") as f:
-        f.write(code)
+        with open("code/main.py", "w") as f:
+            f.write(code)
 
-    with open("tmp/output.txt", "w") as output:
-        subprocess.run(f"sudo docker cp code/main.py {container_name}:{file_name}", shell=True, stdout=output, stderr=output)
+        with open("tmp/output.txt", "w") as output:
+            subprocess.run(f"sudo docker cp code/main.py {container_name}:{file_name}", shell=True, stdout=output, stderr=output)
 
-    with open("tmp/output.txt", "r") as file:
-        val = file.read()
-    # val = "fdafad"
-    d = {"success":True, "container_name":container_name, "response":val}
-    return JsonResponse(d)
+        with open("tmp/output.txt", "r") as file:
+            val = file.read()
+        # val = "fdafad"
+        d = {"success":True, "container_name":container_name, "response":val}
+        return JsonResponse(d)
 
 
 
