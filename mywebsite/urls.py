@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from container import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('chat.urls')),
-    path('container/', include("container.urls")),
+    path('create-new-container', views.create_new_container),
+    path('save-code',views.save_code),
+    # path('container/', include("container.urls")),
 
 ]
