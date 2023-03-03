@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('chat.urls')),
     path('create-new-container/', views.create_new_container),
     path('save-code/',views.save_code),
+    path('delete-container/', views.delete_container)
     # path('container/', include("container.urls")),
 
 ]
