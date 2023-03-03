@@ -21,8 +21,8 @@ from container import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('chat.urls')),
-    path('create-new-container', views.create_new_container),
-    path('save-code',views.save_code),
+    path('create-new-container/', views.create_new_container),
+    path('save-code/',views.save_code),
     # path('container/', include("container.urls")),
 
 ]
