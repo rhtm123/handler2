@@ -1,2 +1,5 @@
 channels==3.0.4
 Django==4.0.1
+channels-redis==4.0.0
+gunicorn
+'uvicorn[standard]'
