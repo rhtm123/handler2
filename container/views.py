@@ -56,7 +56,7 @@ def delete_container(request):
     with open("tmp/output.txt", "r") as file:
         val = file.read()
     d = {"success":True, "container_name":container_name, "response":val}
-    return HttpResponse(d)
+    return JsonResponse(d)
 
 
 def show_containers(request):
@@ -67,4 +67,4 @@ def show_containers(request):
         val = file.read()
     d = {"success":True,"containers":val}
 
-    return HttpResponse(d)
+    return JsonResponse(d)
