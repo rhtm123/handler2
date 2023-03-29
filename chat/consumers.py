@@ -22,14 +22,14 @@ class ChatConsumer(WebsocketConsumer):
         code = text_data_json.get('code')
         container_name = text_data_json.get('container_name')
         file_name = text_data_json.get("file_name")
-        print(code, container_name, file_name)
-        print(f"sudo docker cp code/main.py {container_name}:{file_name}")
+        # print(code, container_name, file_name)
+        # print(f"sudo docker cp code/main.py {container_name}:{file_name}")
         if code:
             with open("code/main.py", "w") as f:
                 f.write(code)
 
-                with open("tmp/output.txt", "w") as output:
-                    subprocess.run(f"sudo docker cp code/main.py {container_name}:{file_name}", shell=True, stdout=output, stderr=output)
+            with open("tmp/output.txt", "w") as output:
+                subprocess.run(f"sudo docker cp code/main.py {container_name}:{file_name}", shell=True, stdout=output, stderr=output)
 
                 # with open("tmp/output.txt", "r") as file:
                 #     val = file.read()
