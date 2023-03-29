@@ -22,6 +22,7 @@ class ChatConsumer(WebsocketConsumer):
         code = text_data_json.get('code')
         container_name = text_data_json.get('container_name')
         file_name = text_data_json.get("file_name")
+        print(code, container_name, file_name)
         if code:
             with open("code/main.py", "w") as f:
                 f.write(code)
