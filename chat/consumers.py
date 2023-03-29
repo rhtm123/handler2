@@ -23,6 +23,7 @@ class ChatConsumer(WebsocketConsumer):
         container_name = text_data_json.get('container_name')
         file_name = text_data_json.get("file_name")
         print(code, container_name, file_name)
+        print(f"sudo docker cp code/main.py {container_name}:{file_name}")
         if code:
             with open("code/main.py", "w") as f:
                 f.write(code)
