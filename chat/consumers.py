@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+import subprocess
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -15,19 +16,31 @@ class ChatConsumer(WebsocketConsumer):
    
 
     def receive(self, text_data):
-        print(text_data);
         # print(text_data['container'])
         text_data_json = json.loads(text_data)
         # print(text_data_json)
-        message = text_data_json['message']
+        code = text_data_json.get('code')
+        container_name = text_data_json.get('container_name')
+        file_name = text_data_json.get("file_name")
+        if code:
+            with open("code/main.py", "w") as f:
+                f.write(code)
 
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type':'chat_message',
-                'message':message
-            }
-        )
+                with open("tmp/output.txt", "w") as output:
+                    subprocess.run(f"sudo docker cp code/main.py {container_name}:{file_name}", shell=True, stdout=output, stderr=output)
+
+                # with open("tmp/output.txt", "r") as file:
+                #     val = file.read()
+                # val = "fdafad"
+                # d = {"success":True, "container_name":container_name, "response":val}
+                
+        # async_to_sync(self.channel_layer.group_send)(
+        #     self.room_group_name,
+        #     {
+        #         'type':'chat_message',
+        #         'message':message
+        #     }
+        # )
 
     def chat_message(self, event):
         message = event['message']

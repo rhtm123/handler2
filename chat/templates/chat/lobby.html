@@ -39,7 +39,7 @@
             e.preventDefault()
             let message = e.target.message.value 
             chatSocket.send(JSON.stringify({
-                'message':message
+                'code':message
             }))
             form.reset()
         })
