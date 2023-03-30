@@ -1,4 +1,5 @@
 channels==3.0.4
+django-cors-headers==3.14.0
 Django==4.0.1
 channels-redis==4.0.0
 gunicorn
