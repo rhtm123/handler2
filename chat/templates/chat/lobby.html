@@ -10,6 +10,8 @@
 <body>
     <h1>Lets chat!</h1>
 
+    <div id="connection"></div>
+
     <form id="form">
         <input type="text" name="message"/>
     </form>
@@ -17,9 +19,20 @@
     <div id="messages"></div>
 
     <script type="text/javascript">
-        let url = `ws://${window.location.host}/ws/socket-server/`
+        let url = `ws://${window.location.host}/ws/socket-server/`;
+        let connection_comp = document.getElementById('connection')
 
         const chatSocket = new WebSocket(url)
+
+
+
+        chatSocket.onopen = function(){
+            connection_comp.innerHTML = "<p>Connected</p>"
+        }
+
+        chatSocket.onclose = function(){
+            connection_comp.innerHTML = "<p>Disconnected</p>"
+        }
 
         chatSocket.onmessage = function(e){
             let data = JSON.parse(e.data)
@@ -39,7 +52,8 @@
             e.preventDefault()
             let message = e.target.message.value 
             chatSocket.send(JSON.stringify({
-                'code':message
+                'code':message,
+                'container_name':"ABCDEFGH"
             }))
             form.reset()
         })
