@@ -47,10 +47,10 @@ class ChatConsumer(WebsocketConsumer):
         except:
             pass
         # print(self.username)
-        self.close()
+        # self.close()
 
     def send_msg(self, event):
-        # msg_type = event.get('type')
+        # = event.get('type')
         # message = event.get('message')
 
         self.send(text_data=json.dumps(event))
