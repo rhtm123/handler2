@@ -88,7 +88,7 @@ class ChatConsumer(WebsocketConsumer):
         # self.send_msg(event)
         if task=="create_container":
             with open("tmp/output.txt", "w") as output:
-                run_docker_container(container_name)
+                run_docker_container(container_name, image_name)
                 subdomain = container_name + "." + DOMAIN_NAME
                 create_nginx_config(container_name, subdomain)
                 reload_nginx()
