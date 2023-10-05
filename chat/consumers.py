@@ -6,6 +6,7 @@ import subprocess
 import socket
 
 DOMAIN_NAME = "nikhilmohite.info"
+host_port = ""
 
 def find_available_port(start_port, end_port):
     for port in range(start_port, end_port + 1):
@@ -19,6 +20,7 @@ def find_available_port(start_port, end_port):
 
 
 def run_docker_container(container_name, image_name):
+    global host_port
     host_port = find_available_port(3000, 3100)
     command = f"sudo docker run -d -p {host_port}:80 --name {container_name} {image_name}"
     subprocess.run(command, shell=True, check=True)
@@ -31,7 +33,7 @@ def create_nginx_config(container_name, subdomain):
         server_name {subdomain};
 
         location / {{
-            proxy_pass http://{container_name}:80; # Assuming your app runs on port 80 in the Docker container
+            proxy_pass http://localhost:{host_port}; # Assuming your app runs on port 80 in the Docker container
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
