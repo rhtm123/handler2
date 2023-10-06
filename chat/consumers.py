@@ -4,6 +4,8 @@ from asgiref.sync import async_to_sync
 import subprocess
 
 import socket
+import docker
+
 
 DOMAIN_NAME = "nikhilmohite.info"
 host_port = ""
@@ -80,8 +82,23 @@ def reload_nginx():
     run_process("sudo nginx -t", "temp/outcome1.txt")
     run_process("sudo systemctl reload nginx", "tmp/outcome2.txt")
     print("nginx reload successful")
-    
 
+def docker_running(container_name):
+    client = docker.from_env()
+    try:
+    # Get information about the container
+    container_info = client.containers.get(container_name)
+
+        # Check if the container is running
+    if container_info.status == "running":
+        return True
+    else:
+        return False
+    except docker.errors.NotFound:
+        return False
+    except docker.errors.APIError as e:
+        print(f"An error occurred while checking the container: {str(e)}")
+    
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         # self.room_group_name = 'test'
@@ -105,11 +122,13 @@ class ChatConsumer(WebsocketConsumer):
         # event = {"message":code, "type":"chat"};
         # self.send_msg(event)
         if task=="create_container":
-            run_docker_container(container_name, image_name)
-            subdomain = container_name + "." + DOMAIN_NAME
-            create_nginx_config(container_name, subdomain)
-            
-            reload_nginx()
+
+            if not docker_running(container_name):
+                run_docker_container(container_name, image_name)
+                subdomain = container_name + "." + DOMAIN_NAME
+                create_nginx_config(container_name, subdomain)
+                
+                reload_nginx()
                 
                 
                 # subprocess.run(f"sudo docker run -d --name {container_name} --expose 80 --net nginx-proxy -e VIRTUAL_HOST={container_name}.thelearningsetu.com {image_name}", shell=True, stdout=output, stderr=output)
