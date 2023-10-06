@@ -35,18 +35,18 @@ def run_docker_container(container_name, image_name):
 def create_nginx_config(container_name, subdomain):
     # Create an Nginx configuration file for the container
     nginx_config = f"""
-    server {{
+    server {
         listen 80;
         server_name {subdomain};
 
-        location / {{
+        location / {
             proxy_pass http://localhost:{host_port}; # Assuming your app runs on port 80 in the Docker container
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
-        }}
-    }}
+        }
+    }
     """
 
     # Write the configuration to a file
@@ -57,7 +57,7 @@ def create_nginx_config(container_name, subdomain):
     # Create a symbolic link to enable the Nginx configuration
     enable_command = f"sudo ln -s {config_file_path} /etc/nginx/sites-enabled/"
 
-    run_process(f"sudo cp /temp/{container_name} /etc/nginx/sites-available/{container_name}", "tmp/outcome7.txt")
+    run_process(f"sudo cp /temp/{container_name} /etc/nginx/sites-available/", "tmp/outcome7.txt")
     run_process( enable_command, "tmp/outcome5.txt")
     print("NGINX files created")
     # subprocess.run(enable_command, shell=True, check=True)
