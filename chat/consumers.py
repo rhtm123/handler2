@@ -35,18 +35,18 @@ def run_docker_container(container_name, image_name):
 def create_nginx_config(container_name, subdomain):
     # Create an Nginx configuration file for the container
     nginx_config = f"""
-    server {
+    server {{
         listen 80;
         server_name {subdomain};
 
-        location / {
+        location / {{
             proxy_pass http://localhost:{host_port}; # Assuming your app runs on port 80 in the Docker container
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
-        }
-    }
+        }}
+    }}
     """
 
     # Write the configuration to a file
