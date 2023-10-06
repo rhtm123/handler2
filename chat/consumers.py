@@ -50,12 +50,14 @@ def create_nginx_config(container_name, subdomain):
     """
 
     # Write the configuration to a file
-    config_file_path = f"/etc/nginx/sites-available/{container_name}"
+    config_file_path = f"/temp/{container_name}"
     with open(config_file_path, "w") as config_file:
         config_file.write(nginx_config)
 
     # Create a symbolic link to enable the Nginx configuration
     enable_command = f"sudo ln -s {config_file_path} /etc/nginx/sites-enabled/"
+
+    run_process(f"sudo cp /temp/{container_name} /etc/nginx/sites-available/{container_name}", "tmp/outcome7.txt")
     run_process( enable_command, "tmp/outcome5.txt")
     print("NGINX files created")
     # subprocess.run(enable_command, shell=True, check=True)
