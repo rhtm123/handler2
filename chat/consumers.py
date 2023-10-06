@@ -19,11 +19,18 @@ def find_available_port(start_port, end_port):
     return None
 
 
+def run_process(cmd, filename):
+    with open(filename, "w") as output:
+        subprocess.run(cdm, shell=True, stdout=output, stderr=output)
+
 def run_docker_container(container_name, image_name):
     global host_port
     host_port = find_available_port(3000, 3100)
+    print("host port found", host_port)
     command = f"sudo docker run -d -p {host_port}:80 --name {container_name} {image_name}"
-    subprocess.run(command, shell=True, check=True)
+    run_process(command, "temp/outcome6.txt")
+    print("Container Created")
+    # subprocess.run(command, shell=True, check=True)
   
 def create_nginx_config(container_name, subdomain):
     # Create an Nginx configuration file for the container
@@ -49,21 +56,28 @@ def create_nginx_config(container_name, subdomain):
 
     # Create a symbolic link to enable the Nginx configuration
     enable_command = f"sudo ln -s {config_file_path} /etc/nginx/sites-enabled/"
-    subprocess.run(enable_command, shell=True, check=True)
+    run_process( enable_command, "temp/outcome5.txt")
+    print("NGINX files created")
+    # subprocess.run(enable_command, shell=True, check=True)
 
 def delete_nginx_config(container_name):
     # Remove the symbolic link to disable the Nginx configuration
     disable_command = f"sudo rm /etc/nginx/sites-enabled/{container_name}"
-    subprocess.run(disable_command, shell=True, check=True)
+
+    run_process(disable_command, "temp/outcome3.txt")
 
     # Delete the configuration file
     config_file_path = f"/etc/nginx/sites-available/{container_name}"
-    subprocess.run(f"sudo rm {config_file_path}", shell=True, check=True)
+
+    run_process( f"sudo rm {config_file_path}" ,"temp/outcome4.txt")
+    print("NGINX files deleted")
+    # subprocess.run(f"sudo rm {config_file_path}", shell=True, check=True)
 
 def reload_nginx():
     # Test Nginx configuration and reload if it's valid
-    subprocess.run("sudo nginx -t", shell=True, check=True)
-    subprocess.run("sudo systemctl reload nginx", shell=True, check=True)
+    run_process("sudo nginx -t", "temp/outcome1.txt")
+    run_process("sudo systemctl reload nginx", "temp/outcome2.txt")
+    print("nginx reload successful")
     
 
 class ChatConsumer(WebsocketConsumer):
@@ -89,11 +103,10 @@ class ChatConsumer(WebsocketConsumer):
         # event = {"message":code, "type":"chat"};
         # self.send_msg(event)
         if task=="create_container":
-            with open("tmp/output.txt", "w") as output:
-                run_docker_container(container_name, image_name)
-                subdomain = container_name + "." + DOMAIN_NAME
-                create_nginx_config(container_name, subdomain)
-                reload_nginx()
+            run_docker_container(container_name, image_name)
+            subdomain = container_name + "." + DOMAIN_NAME
+            create_nginx_config(container_name, subdomain)
+            reload_nginx()
                 
                 
                 # subprocess.run(f"sudo docker run -d --name {container_name} --expose 80 --net nginx-proxy -e VIRTUAL_HOST={container_name}.thelearningsetu.com {image_name}", shell=True, stdout=output, stderr=output)
@@ -112,7 +125,8 @@ class ChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         try:
             with open("tmp/output.txt", "w") as output:
-                delete_nginx_config(sekf.username)
+                print("disconnected")
+                delete_nginx_config(self.username)
                 reload_nginx()
                 # subprocess.run(f"sudo docker kill {self.username};sudo docker rm -f {self.username}", shell=True, stdout=output, stderr=output)
         except:
