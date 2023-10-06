@@ -87,13 +87,13 @@ def docker_running(container_name):
     client = docker.from_env()
     try:
     # Get information about the container
-    container_info = client.containers.get(container_name)
-
-        # Check if the container is running
-    if container_info.status == "running":
-        return True
-    else:
-        return False
+        container_info = client.containers.get(container_name)
+    
+            # Check if the container is running
+        if container_info.status == "running":
+            return True
+        else:
+            return False
     except docker.errors.NotFound:
         return False
     except docker.errors.APIError as e:
