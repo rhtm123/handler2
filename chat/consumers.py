@@ -50,7 +50,7 @@ def create_nginx_config(container_name, subdomain):
     """
 
     # Write the configuration to a file
-    config_file_path = f"/temp/{container_name}"
+    config_file_path = f"/home/rohit/handler2/temp/{container_name}"
     with open(config_file_path, "w") as config_file:
         config_file.write(nginx_config)
 
