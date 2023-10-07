@@ -149,7 +149,7 @@ class ChatConsumer(WebsocketConsumer):
             with open("tmp/output.txt", "w") as output:
                 print("disconnected")
                 delete_nginx_config(self.username)
-                run_process("sudo docker kill {self.username};sudo docker rm -f {self.username}", "tmp/outcome.txt")
+                run_process(f"sudo docker kill {self.username};sudo docker rm -f {self.username}", "tmp/outcome.txt")
                 reload_nginx()
                 # subprocess.run(f"sudo docker kill {self.username};sudo docker rm -f {self.username}", shell=True, stdout=output, stderr=output)
         except:
