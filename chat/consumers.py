@@ -29,7 +29,7 @@ def run_docker_container(container_name, image_name):
     global host_port
     host_port = find_available_port(3000, 3100)
     print("host port found", host_port)
-    command = f"sudo docker run -d -p {host_port}:80 --name {container_name} {image_name}"
+    command = f"sudo docker run -d -p {host_port}:80 --name {container_name} --expose 80 {image_name}"
     run_process(command, "tmp/outcome6.txt")
     print("Container Created")
     # subprocess.run(command, shell=True, check=True)
