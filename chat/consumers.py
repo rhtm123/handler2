@@ -63,23 +63,24 @@ def create_nginx_config(container_name, subdomain):
         config_file.write(nginx_config)
 
     # Create a symbolic link to enable the Nginx configuration
-    enable_command = f"ln -s {config_file_path} /etc/nginx/sites-enabled/"
+    enable_command = f"sudo ln -s {config_file_path} /etc/nginx/sites-enabled/"
 
-    run_process(f"cp /home/rohit/handler2/temp/{container_name} /etc/nginx/sites-available/", "tmp/outcome7.txt")
+    run_process(f"sudo cp /home/rohit/handler2/temp/{container_name} /etc/nginx/sites-available/", "tmp/outcome7.txt")
     run_process( enable_command, "tmp/outcome5.txt")
     print("NGINX files created")
     # subprocess.run(enable_command, shell=True, check=True)
 
 def delete_nginx_config(container_name):
     # Remove the symbolic link to disable the Nginx configuration
-    disable_command = f"rm /etc/nginx/sites-enabled/{container_name}"
+    disable_command = f"sudo rm /etc/nginx/sites-enabled/{container_name}"
 
     run_process(disable_command, "tmp/outcome3.txt")
 
     # Delete the configuration file
     config_file_path = f"/etc/nginx/sites-available/{container_name}"
 
-    run_process( f"rm {config_file_path}" ,"tmp/outcome4.txt")
+    run_process( f"sudo rm {config_file_path}" ,"tmp/outcome4.txt")
+    run_process( f"sudo rm /home/rohit/handler2/temp/{container_name}" ,"tmp/outcome4.txt")
     print("NGINX files deleted")
     # subprocess.run(f"sudo rm {config_file_path}", shell=True, check=True)
 
