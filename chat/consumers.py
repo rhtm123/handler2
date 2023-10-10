@@ -86,8 +86,8 @@ def delete_nginx_config(container_name):
 
 def reload_nginx():
     # Test Nginx configuration and reload if it's valid
-    run_process("nginx -t", "temp/outcome1.txt")
-    run_process("nginx -s reload", "tmp/outcome2.txt")
+    run_process("sudo nginx -t", "temp/outcome1.txt")
+    run_process("sudo nginx -s reload", "tmp/outcome2.txt")
     print("nginx reload successful")
 
 def docker_running(container_name):
