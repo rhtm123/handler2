@@ -48,6 +48,14 @@ def create_nginx_config(container_name, subdomain):
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
         }}
+
+        location /pty {{
+            proxy_pass http://localhost:{host_port};
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+        }}
+
     }}
     """
 
