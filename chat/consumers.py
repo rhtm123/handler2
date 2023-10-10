@@ -42,15 +42,13 @@ def create_nginx_config(container_name, subdomain):
         server_name {subdomain};
 
         location / {{
-            proxy_pass http://localhost:{host_port}; # Assuming your app runs on port 80 in the Docker container
+            proxy_pass http://127.0.0.1:{host_port}; # Assuming your app runs on port 80 in the Docker container
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
         }}
 
         location /pty {{
-            proxy_pass http://localhost:{host_port};
+            proxy_pass http://127.0.0.1:{host_port};
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
