@@ -29,7 +29,7 @@ def run_docker_container(container_name, image_name):
     global host_port
     host_port = find_available_port(3000, 3100)
     print("host port found", host_port)
-    command = f"sudo docker run -d -p {host_port}:80 --name {container_name} --expose 80 {image_name}"
+    command = f"docker run -d -p {host_port}:80 --name {container_name} --expose 80 {image_name}"
     run_process(command, "tmp/outcome6.txt")
     print("Container Created")
     # subprocess.run(command, shell=True, check=True)
@@ -63,30 +63,30 @@ def create_nginx_config(container_name, subdomain):
         config_file.write(nginx_config)
 
     # Create a symbolic link to enable the Nginx configuration
-    enable_command = f"sudo ln -s {config_file_path} /etc/nginx/sites-enabled/"
+    enable_command = f"ln -s {config_file_path} /etc/nginx/sites-enabled/"
 
-    run_process(f"sudo cp /home/rohit/handler2/temp/{container_name} /etc/nginx/sites-available/", "tmp/outcome7.txt")
+    run_process(f"cp /home/rohit/handler2/temp/{container_name} /etc/nginx/sites-available/", "tmp/outcome7.txt")
     run_process( enable_command, "tmp/outcome5.txt")
     print("NGINX files created")
     # subprocess.run(enable_command, shell=True, check=True)
 
 def delete_nginx_config(container_name):
     # Remove the symbolic link to disable the Nginx configuration
-    disable_command = f"sudo rm /etc/nginx/sites-enabled/{container_name}"
+    disable_command = f"rm /etc/nginx/sites-enabled/{container_name}"
 
     run_process(disable_command, "tmp/outcome3.txt")
 
     # Delete the configuration file
     config_file_path = f"/etc/nginx/sites-available/{container_name}"
 
-    run_process( f"sudo rm {config_file_path}" ,"tmp/outcome4.txt")
+    run_process( f"rm {config_file_path}" ,"tmp/outcome4.txt")
     print("NGINX files deleted")
     # subprocess.run(f"sudo rm {config_file_path}", shell=True, check=True)
 
 def reload_nginx():
     # Test Nginx configuration and reload if it's valid
-    run_process("sudo nginx -t", "temp/outcome1.txt")
-    run_process("sudo nginx -s reload", "tmp/outcome2.txt")
+    run_process("nginx -t", "temp/outcome1.txt")
+    run_process("nginx -s reload", "tmp/outcome2.txt")
     print("nginx reload successful")
 
 def docker_running(container_name):
@@ -146,7 +146,7 @@ class ChatConsumer(WebsocketConsumer):
                 f.write(code)
 
             with open("tmp/output.txt", "w") as output:
-                subprocess.run(f"sudo docker cp code/main.py {container_name}:{file_name}", shell=True, stdout=output, stderr=output)
+                subprocess.run(f"docker cp code/main.py {container_name}:{file_name}", shell=True, stdout=output, stderr=output)
             
             self.send_msg({"type":"info", "message":"code_saved"})
 
@@ -155,7 +155,7 @@ class ChatConsumer(WebsocketConsumer):
             with open("tmp/output.txt", "w") as output:
                 print("disconnected")
                 delete_nginx_config(self.username)
-                run_process(f"sudo docker kill {self.username};sudo docker rm -f {self.username}", "tmp/outcome.txt")
+                run_process(f"docker kill {self.username};docker rm -f {self.username}", "tmp/outcome.txt")
                 reload_nginx()
                 # subprocess.run(f"sudo docker kill {self.username};sudo docker rm -f {self.username}", shell=True, stdout=output, stderr=output)
         except:
