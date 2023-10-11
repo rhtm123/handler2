@@ -91,7 +91,7 @@ def create_nginx_config(container_name, subdomain):
     # Create a symbolic link to enable the Nginx configuration
     #enable_command = f"sudo ln -s {config_file_path} /etc/nginx/sites-enabled/"
     sites_enabled = "/etc/nginx/sites-enabled/"+container_name
-    os.symlink(sites_available, link_path)
+    os.symlink(sites_available, sites_enabled)
     #run_process(f"sudo cp /home/rohit/handler2/temp/{container_name} /etc/nginx/sites-available/", "tmp/outcome7.txt")
     #run_process( enable_command, "tmp/outcome5.txt")
     print("Symbolic link created")
