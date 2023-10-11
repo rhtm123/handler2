@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 import subprocess
+from django.core.management import call_command
+
 
 import socket
 import docker
@@ -122,8 +124,9 @@ def delete_nginx_config(container_name):
 def reload_nginx():
     # Test Nginx configuration and reload if it's valid
     # run_process("sudo nginx -t", "tmp/outcome1.txt")
-    subprocess.run(["nginx", "-t"])
-    subprocess.run(["nginx", "-s", "reload"])
+    # subprocess.run(["nginx", "-t"])
+    call_command('nginx_reload_command')
+    # subprocess.run(["nginx", "-s", "reload"])
     # run_process("sudo nginx -s reload", "tmp/outcome2.txt")
     print("nginx reload successful")
 
