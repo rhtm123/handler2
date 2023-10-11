@@ -24,7 +24,7 @@ def find_available_port(start_port, end_port):
 def run_process(cmd, filename):
     with open(filename, "w") as output:
         print("command- ", cmd, "filename - ", filename)
-        subprocess.run(cmd, shell=True, stdout=output, stderr=output)
+        subprocess.run(cmd, shell=false, stdout=output, stderr=output)
 
 def run_docker_container(container_name, image_name):
     global host_port
