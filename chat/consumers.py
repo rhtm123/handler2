@@ -84,13 +84,13 @@ def create_nginx_config(container_name, subdomain):
     with open(temp_file, "w") as config_file:
         config_file.write(nginx_config)
 
-    sites_available = "/etc/nginx/sites-available/" + {container_name}
+    sites_available = "/etc/nginx/sites-available/" + container_name
     shutil.copy(temp_file, sites_available)
 
     print("Config file created")
     # Create a symbolic link to enable the Nginx configuration
     #enable_command = f"sudo ln -s {config_file_path} /etc/nginx/sites-enabled/"
-    sites_enabled = "/etc/nginx/sites-enabled/"+{container_name}
+    sites_enabled = "/etc/nginx/sites-enabled/"+container_name
     os.symlink(sites_available, link_path)
     #run_process(f"sudo cp /home/rohit/handler2/temp/{container_name} /etc/nginx/sites-available/", "tmp/outcome7.txt")
     #run_process( enable_command, "tmp/outcome5.txt")
