@@ -123,11 +123,11 @@ def delete_nginx_config(container_name):
 
 def reload_nginx():
     # Test Nginx configuration and reload if it's valid
-    run_process("sudo nginx -t", "tmp/outcome1.txt")
+    run_process("sudo /usr/sbin/nginx -t", "tmp/outcome1.txt")
     # subprocess.run(["nginx", "-t"])
     # call_command('nginx_reload_command')
     # subprocess.run(["nginx", "-s", "reload"])
-    run_process("sudo nginx -s reload", "tmp/outcome2.txt")
+    run_process("sudo /usr/sbin/nginx -s reload", "tmp/outcome2.txt")
     print("nginx reload successful")
 
 def docker_running(container_name):
