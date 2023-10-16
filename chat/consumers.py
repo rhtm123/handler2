@@ -13,7 +13,7 @@ import os
 
 
 
-DOMAIN_NAME = "learningsetu.com"
+DOMAIN_NAME = "thelearningsetu.com"
 host_port = ""
 
 def find_available_port(start_port, end_port):
