@@ -197,7 +197,7 @@ class ChatConsumer(WebsocketConsumer):
         try:
             with open("tmp/output.txt", "w") as output:
                 print("disconnected")
-                time.sleep(60)
+                time.sleep(10)
                 if not getattr(self, 'reconnecting', False):
                     delete_nginx_config(self.username)
                     run_process(f"docker kill {self.username};docker rm -f {self.username}", "tmp/outcome.txt")
